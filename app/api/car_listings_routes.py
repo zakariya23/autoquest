@@ -6,6 +6,7 @@ from app.forms.car_listing_form import CarListingForm
 from app.forms.car_photo_form import CarPhotoForm
 from app.forms.review_form import ReviewForm
 from datetime import datetime
+from sqlalchemy import or_
 
 car_listing_routes = Blueprint('car_listings', __name__)
 
@@ -163,3 +164,23 @@ def create_new_car_photo(id):
             "message": "Validation error",
             "statusCode": 400,
             'errors': validation_errors_to_error_messages(form.errors)}, 400
+
+# SEARCH CAR LISTINGS
+@car_listing_routes.route('/search')
+def search_car_listings():
+    query = request.args.get('query', default='', type=str)
+    search_results = (
+        CarListing.query
+        .filter(or_(
+            CarListing.make.ilike(f"%{query}%"),
+            CarListing.model.ilike(f"%{query}%"),
+            CarListing.year.ilike(f"%{query}%"),
+            CarListing.trim.ilike(f"%{query}%"),
+            CarListing.body_type.ilike(f"%{query}%"),
+            CarListing.exterior_color.ilike(f"%{query}%"),
+            CarListing.interior_color.ilike(f"%{query}%")
+        ))
+        .all()
+    )
+
+    return {'car_listings': {car_listing.id: car_listing.to_dict() for car_listing in search_results}}

@@ -1,5 +1,54 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  margin-right: 10px;
+}
+
+nav a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.menu-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.menu-button-icon {
+  width: 30px;
+  height: 5px;
+  background-color: #00a99d;
+  margin: 6px 0;
+}
+
 .profile-dropdown {
   position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+  list-style-type: none;
+  margin-top: 15px;
+  border-radius: 4px;
 }
 
 .hidden {
