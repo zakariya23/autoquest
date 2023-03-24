@@ -6,6 +6,10 @@ import LoginFormPage from "./components/LoginFormPage";
 import { authenticate } from "./store/session";
 import Navigation from "./components/Navigation";
 import AllCarListings from "./components/CarListing/AllCarListings";
+import SingleCarListing from "./components/CarListing/SingleCarListing";
+import CarListingForm from "./components/CarListing/CarListingCreate";
+import Autocomplete from "./components/CarAutocomplete";
+
 
 
 function App() {
@@ -29,7 +33,17 @@ function App() {
           <Route path="/all">
             <AllCarListings />
           </Route>
+          <Route exact path="/car_listings/:id">
+            <SingleCarListing />
+          </Route>
+          <Route path="/search">
+            <Autocomplete />
+          </Route>
+          <Route exact path="/new">
+            <CarListingForm />
+          </Route>
         </Switch>
+
       )}
     </>
   );

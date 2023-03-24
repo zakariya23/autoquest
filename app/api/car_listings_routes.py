@@ -45,7 +45,7 @@ def get_car_listing_details(id):
         avg_rating = 0
     car_listing['avg_rating'] = avg_rating
     car_listing['number_of_reviews'] = len(car_listing_reviews)
-
+    car_listing['reviews']= [car_listing_review.to_dict() for car_listing_review in car_listing_reviews]
     return jsonify(car_listing)
 
 

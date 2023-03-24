@@ -40,6 +40,7 @@ carListings = Object.values(carListings.car_listings)
 
 
   return (
+
     <div className="car-listings-container">
       {carListings.map((carListing) => (
         <CarListingCard key={carListing.id} carListing={carListing} />

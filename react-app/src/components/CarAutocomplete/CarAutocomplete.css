@@ -1,0 +1,4 @@
+.suggestions-list li:hover {
+    background-color: blue;
+    color: white;
+  }
