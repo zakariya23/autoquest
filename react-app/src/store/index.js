@@ -1,9 +1,15 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import session from './session'
+import car_listings from './car_listings'
+import car_photos from './car_photos'
+import reviews from './reviews'
 
 const rootReducer = combineReducers({
   session,
+  car_listings,
+  car_photos,
+  reviews
 });
 
 

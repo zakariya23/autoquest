@@ -1,0 +1,11 @@
+.car-listings-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px;
+  }
+
+  .car-listing-card {
+    flex-basis: calc(33.333% - 20px);
+  }
