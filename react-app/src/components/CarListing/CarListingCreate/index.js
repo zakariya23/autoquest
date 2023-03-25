@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createCarListing } from "../../../store/car_listings";
+import { postCarPhotoThunk } from "../../../store/car_photos";
 import Autocomplete from "../../CarAutocomplete";
+
 // import "./CarListingCreate.css";
 
 export default function CarListingForm() {
@@ -19,6 +21,8 @@ export default function CarListingForm() {
   const [exteriorColor, setExteriorColor] = useState("");
   const [interiorColor, setInteriorColor] = useState("");
   const [mileage, setMileage] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState([]);
 
   // Update functions for form fields
@@ -54,7 +58,15 @@ export default function CarListingForm() {
     setBodyType(selectedCar.Category.split(',')[0]);
   };
 
+  const handleImageURLChange = (e) => {
+    const url = e.target.value;
+    setImageURL(url);
+    setImagePreview(url);
+  };
+
+
   const handleSubmit = async (e) => {
+    let validationErrors = []
     e.preventDefault();
 
     const payload = {
@@ -69,12 +81,49 @@ export default function CarListingForm() {
       mileage,
     };
 
-    await dispatch(createCarListing(payload))
-      .then((createdCarListing) => clearData(createdCarListing))
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
-      });
+
+    const checkImageURL = (imageURL) => {
+        return (
+          !imageURL.endsWith(".png") &&
+          !imageURL.endsWith(".jpg") &&
+          !imageURL.endsWith(".jpeg")
+        );
+      };
+
+
+
+
+
+      if (!imageURL) {
+        validationErrors.push("Image URL is required");
+
+      }
+      else {
+        if (checkImageURL(imageURL)) {
+          validationErrors.push("Image URL must end in .png, .jpg, or .jpeg");
+
+        }
+      }
+
+
+      if (validationErrors.length === 0) {
+        try {
+          let createdCarListing = await dispatch(createCarListing(payload));
+          clearData(createdCarListing);
+          await dispatch(postCarPhotoThunk({
+              car_listing_id: createdCarListing.id,
+              photo_url: imageURL,
+            }, createdCarListing.id));
+        } catch (res) {
+          if (typeof res.json === 'function') {
+            const data = await res.json();
+            if (data && data.errors) setErrors(data.errors);
+          } else {
+            console.error('Error:', res);
+          }
+        }
+      }
+
   };
 
   // Render form
@@ -117,6 +166,23 @@ export default function CarListingForm() {
 
   <label htmlFor="mileage">Mileage</label>
   <input type="number" name="mileage" value={mileage} onChange={updateMileage} required />
+
+  <br></br>
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={imageURL}
+            onChange={handleImageURLChange}
+            className="business-form-input"
+          />
+          {imagePreview && <><img src={imagePreview} alt="Preview" className="image-preview" style={{
+            width: "320px",
+            height: "180px",
+            objectFit: "cover",
+          }} />
+            <br></br>
+          </>
+          }
 
   <button type="submit">Submit</button>
 </form>
