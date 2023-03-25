@@ -1,0 +1,191 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { createCarListing } from "../../../store/car_listings";
+import { postCarPhotoThunk } from "../../../store/car_photos";
+import Autocomplete from "../../CarAutocomplete";
+
+// import "./CarListingCreate.css";
+
+export default function CarListingForm() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  // Declare state for form fields
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [year, setYear] = useState("");
+  const [price, setPrice] = useState("");
+  const [trim, setTrim] = useState("");
+  const [bodyType, setBodyType] = useState("");
+  const [exteriorColor, setExteriorColor] = useState("");
+  const [interiorColor, setInteriorColor] = useState("");
+  const [mileage, setMileage] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState([]);
+
+  // Update functions for form fields
+  const updateMake = (e) => setMake(e.target.value);
+  const updateModel = (e) => setModel(e.target.value);
+  const updateYear = (e) => setYear(e.target.value);
+  const updatePrice = (e) => setPrice(e.target.value);
+  const updateTrim = (e) => setTrim(e.target.value);
+  const updateBodyType = (e) => setBodyType(e.target.value);
+  const updateExteriorColor = (e) => setExteriorColor(e.target.value);
+  const updateInteriorColor = (e) => setInteriorColor(e.target.value);
+  const updateMileage = (e) => setMileage(e.target.value);
+
+  const clearData = (createdCarListing) => {
+    setMake("");
+    setModel("");
+    setYear("");
+    setPrice("");
+    setTrim("");
+    setBodyType("");
+    setExteriorColor("");
+    setInteriorColor("");
+    setMileage("");
+    setErrors([]);
+
+    history.push(`/car-listings/${createdCarListing.id}`);
+  };
+
+  const handleCarSelect = (selectedCar) => {
+    setMake(selectedCar.Make);
+    setModel(selectedCar.Model);
+    setYear(selectedCar.Year);
+    setBodyType(selectedCar.Category.split(',')[0]);
+  };
+
+  const handleImageURLChange = (e) => {
+    const url = e.target.value;
+    setImageURL(url);
+    setImagePreview(url);
+  };
+
+
+  const handleSubmit = async (e) => {
+    let validationErrors = []
+    e.preventDefault();
+
+    const payload = {
+      make,
+      model,
+      year,
+      price,
+      trim,
+      body_type: bodyType,
+      exterior_color: exteriorColor,
+      interior_color: interiorColor,
+      mileage,
+    };
+
+
+    const checkImageURL = (imageURL) => {
+        return (
+          !imageURL.endsWith(".png") &&
+          !imageURL.endsWith(".jpg") &&
+          !imageURL.endsWith(".jpeg")
+        );
+      };
+
+
+
+
+
+      if (!imageURL) {
+        validationErrors.push("Image URL is required");
+
+      }
+      else {
+        if (checkImageURL(imageURL)) {
+          validationErrors.push("Image URL must end in .png, .jpg, or .jpeg");
+
+        }
+      }
+
+
+      if (validationErrors.length === 0) {
+        try {
+          let createdCarListing = await dispatch(createCarListing(payload));
+          clearData(createdCarListing);
+          await dispatch(postCarPhotoThunk({
+              car_listing_id: createdCarListing.id,
+              photo_url: imageURL,
+            }, createdCarListing.id));
+        } catch (res) {
+          if (typeof res.json === 'function') {
+            const data = await res.json();
+            if (data && data.errors) setErrors(data.errors);
+          } else {
+            console.error('Error:', res);
+          }
+        }
+      }
+
+  };
+
+  // Render form
+  return (
+    <div>
+
+     <form className="car-listing-form" onSubmit={handleSubmit}>
+  <h2>Create a Car Listing</h2>
+  <Autocomplete onCarSelect={handleCarSelect} />
+  {errors.length > 0 && (
+    <ul className="errors-list">
+      {errors.map((error, idx) => (
+        <li key={idx}>{error}</li>
+      ))}
+    </ul>
+  )}
+  <label htmlFor="make">Make</label>
+  <input type="text" name="make" value={make} onChange={updateMake} required />
+
+  <label htmlFor="model">Model</label>
+  <input type="text" name="model" value={model} onChange={updateModel} required />
+
+  <label htmlFor="year">Year</label>
+  <input type="number" name="year" value={year} onChange={updateYear} required />
+
+  <label htmlFor="price">Price</label>
+  <input type="number" name="price" value={price} onChange={updatePrice} required />
+
+  <label htmlFor="trim">Trim</label>
+  <input type="text" name="trim" value={trim} onChange={updateTrim} />
+
+  <label htmlFor="bodyType">Body Type</label>
+  <input type="text" name="bodyType" value={bodyType} onChange={updateBodyType} />
+
+  <label htmlFor="exteriorColor">Exterior Color</label>
+  <input type="text" name="exteriorColor" value={exteriorColor} onChange={updateExteriorColor} />
+
+  <label htmlFor="interiorColor">Interior Color</label>
+  <input type="text" name="interiorColor" value={interiorColor} onChange={updateInteriorColor} />
+
+  <label htmlFor="mileage">Mileage</label>
+  <input type="number" name="mileage" value={mileage} onChange={updateMileage} required />
+
+  <br></br>
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={imageURL}
+            onChange={handleImageURLChange}
+            className="business-form-input"
+          />
+          {imagePreview && <><img src={imagePreview} alt="Preview" className="image-preview" style={{
+            width: "320px",
+            height: "180px",
+            objectFit: "cover",
+          }} />
+            <br></br>
+          </>
+          }
+
+  <button type="submit">Submit</button>
+</form>
+    </div>
+  );
+}

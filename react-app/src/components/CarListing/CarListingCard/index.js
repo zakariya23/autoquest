@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getSingleCarPhotoThunk } from '../../../store/car_photos';
 import './CarListingCard.css';
+import { useHistory } from 'react-router-dom';
 
 const CarListingCard = ({ carListing }) => {
   const {
@@ -14,9 +15,12 @@ const CarListingCard = ({ carListing }) => {
     mileage
   } = carListing;
 
+
+
   const dispatch = useDispatch();
   const [photoUrl, setPhotoUrl] = useState('');
-
+  const history = useHistory();
+  
   useEffect(() => {
     const fetchCarPhoto = async () => {
       try {
@@ -33,8 +37,13 @@ const CarListingCard = ({ carListing }) => {
     fetchCarPhoto();
   }, [id, dispatch]);
 
+
+  const handleClick = () => {
+    history.push(`/car_listings/${carListing.id}`);
+  };
+
   return (
-    <div className="car-listing-card">
+    <div className="car-listing-card" onClick={handleClick}>
       <img
         className="car-listing-card__background"
         src={photoUrl}

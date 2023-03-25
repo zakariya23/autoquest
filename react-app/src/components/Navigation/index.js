@@ -10,11 +10,11 @@ function Navigation({ isLoaded }) {
 
   return (
     <nav>
-      <img src={`https://media.discordapp.net/attachments/533035859214073877/1087508516635418705/image.png`} alt="Logo" className="logo" />
+    
       <ul>
         <li>
           <NavLink exact to="/">
-            Home
+          <img src={`https://media.discordapp.net/attachments/533035859214073877/1087508516635418705/image.png`} alt="Logo" className="logo" />
           </NavLink>
         </li>
         {isLoaded && (
