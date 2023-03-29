@@ -11,6 +11,7 @@ import CarListingForm from "./components/CarListing/CarListingCreate";
 import Autocomplete from "./components/CarAutocomplete";
 import MyCarListings from "./components/CarListing/MyCarListings";
 import EditCarListing from "./components/CarListing/CarListingEditDelete";
+import CarSearch from "./components/CarSearch";
 
 
 function App() {
@@ -25,13 +26,16 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+             <Route path="/search" >
+            <CarSearch />
+          </Route>
           <Route path="/login" >
             <LoginFormPage />
           </Route>
           <Route path="/signup">
             <SignupFormPage />
           </Route>
-          <Route path="/all">
+          <Route exact path="/all">
             <AllCarListings />
           </Route>
           <Route exact path="/car_listings/:id">

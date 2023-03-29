@@ -56,6 +56,9 @@ function ProfileButton({ user }) {
             <li>
             <NavLink exact to="/my_listings"><button>My Listings</button></NavLink>
             </li>
+            <li>
+            <NavLink exact to="/new"><button>New Listing</button></NavLink>
+            </li>
 
           </>
 
