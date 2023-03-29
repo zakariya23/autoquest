@@ -51,14 +51,17 @@ const SingleCarListing = () => {
 
   const handleAddReview = async (reviewData) => {
     await dispatch(postReviewThunk(id, reviewData, userId));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   const handleUpdateReview = async (reviewId, reviewData) => {
     await dispatch(editReviewThunk(id, reviewId, reviewData));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   const handleDeleteReview = async (reviewId) => {
     await dispatch(deleteReviewThunk(reviewId));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   return (
