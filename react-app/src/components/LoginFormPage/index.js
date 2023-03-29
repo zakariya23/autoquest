@@ -21,6 +21,14 @@ function LoginFormPage() {
     }
   };
 
+  const demoSignIn = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(login("demo@user.io", "password"));
+    if (data) {
+      setErrors(data);
+    }
+  };
+
   return (
     <>
       <h1>Log In</h1>
@@ -48,7 +56,14 @@ function LoginFormPage() {
             required
           />
         </label>
-        <button type="submit">Log In</button>
+        <button type="submit">Log In asdasd</button>
+        <button
+          className="demo-user-button"
+          type="submit"
+          onClick={(e) => demoSignIn(e)}
+        >
+          Continue with Demo User
+        </button>
       </form>
     </>
   );
