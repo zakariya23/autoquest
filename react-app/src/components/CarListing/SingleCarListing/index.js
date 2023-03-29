@@ -16,9 +16,10 @@ const SingleCarListing = () => {
   const carPhotos = useSelector((state) => state.car_photos.carPhotos);
   const carListing = useSelector((state) => state.car_listings.singleCarListing);
   const [isLoading, setIsLoading] = useState(true);
-  const userId = useSelector((state) => state.session.user.id);
   const user = useSelector((state) => state.session.user);
   const [reviewActionCounter, setReviewActionCounter] = useState(0);
+  const isLoggedIn = !!user;
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,15 +51,18 @@ const SingleCarListing = () => {
   } = carListing;
 
   const handleAddReview = async (reviewData) => {
-    await dispatch(postReviewThunk(id, reviewData, userId));
+    await dispatch(postReviewThunk(id, reviewData, user.id));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   const handleUpdateReview = async (reviewId, reviewData) => {
     await dispatch(editReviewThunk(id, reviewId, reviewData));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   const handleDeleteReview = async (reviewId) => {
     await dispatch(deleteReviewThunk(reviewId));
+    setReviewActionCounter(reviewActionCounter + 1);
   };
 
   return (
@@ -97,13 +101,14 @@ const SingleCarListing = () => {
             />
           ))}
         </div>
+        {isLoggedIn && (
         <div className="single-car-listing-owner">
           <h2>Owner</h2>
-          <p>Username: {user.username}</p>
-          <p>Email: {user.email}</p>
-          {/* You will need to fetch the number of listings for the user separately */}
-          <p>Number of Listings: {/* Display the number of listings here */}</p>
+          <p>Username: {carListing.owner.username}</p>
+          <p>Email: {carListing.owner.email}</p>
+          <p>Number of Listings: {carListing.owner.number_of_listings}</p>
         </div>
+      )}
       </div>
     </div>
   );
