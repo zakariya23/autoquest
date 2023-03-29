@@ -17,6 +17,8 @@ const SingleCarListing = () => {
   const carListing = useSelector((state) => state.car_listings.singleCarListing);
   const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector((state) => state.session.user.id);
+  const user = useSelector((state) => state.session.user);
+  const [reviewActionCounter, setReviewActionCounter] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,16 +31,7 @@ const SingleCarListing = () => {
     };
 
     fetchData();
-  }, [id, dispatch]);
-
-
-  useEffect(() => {
-    if (!isLoading) {
-      dispatch(getSingleCarListingThunk(id));
-    }
-  }, [carListing.reviews, isLoading, id, dispatch]);
-
-
+  }, [id, dispatch, reviewActionCounter]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -69,43 +62,50 @@ const SingleCarListing = () => {
   };
 
   return (
-      <div className="single-car-listing">
-        <h1 className="single-car-listing-title">
-          {year} {make} {model} {trim} - ${price.toLocaleString()}
-        </h1>
-        <Carousel className="single-car-listing-carousel">
-          {carListing.car_photos.map((carPhoto) => (
-            <div key={carPhoto.id}>
-              <img src={carPhoto.photo_url} alt={`${make} ${model}`} />
-            </div>
-          ))}
-        </Carousel>
-        <div className="single-car-listing-content">
-          <div className="single-car-listing-overview">
-            <h2>Overview</h2>
-            <p>Year: {year}</p>
-            <p>Make: {make}</p>
-            <p>Model: {model}</p>
-            <p>Trim: {trim}</p>
-            <p>Mileage: {mileage.toLocaleString()} miles</p>
-            <p>Body Type: {body_type}</p>
-            <p>Exterior Color: {exterior_color}</p>
-            <p>Interior Color: {interior_color}</p>
+    <div className="single-car-listing">
+      <h1 className="single-car-listing-title">
+        {year} {make} {model} {trim} - ${price.toLocaleString()}
+      </h1>
+      <Carousel className="single-car-listing-carousel">
+        {carListing.car_photos.map((carPhoto) => (
+          <div key={carPhoto.id}>
+            <img src={carPhoto.photo_url} alt={`${make} ${model}`} />
           </div>
-          <div className="single-car-listing-reviews">
-      <h2>Reviews</h2>
-      <ReviewForm onSubmit={handleAddReview} />
-      {carListing.reviews.map((review) => (
-        <Review
-          key={review.id}
-          review={review}
-          onUpdate={handleUpdateReview}
-          onDelete={handleDeleteReview}
-        />
-      ))}
+        ))}
+      </Carousel>
+      <div className="single-car-listing-content">
+        <div className="single-car-listing-overview">
+          <h2>Overview</h2>
+          <p>Year: {year}</p>
+          <p>Make: {make}</p>
+          <p>Model: {model}</p>
+          <p>Trim: {trim}</p>
+          <p>Mileage: {mileage.toLocaleString()} miles</p>
+          <p>Body Type: {body_type}</p>
+          <p>Exterior Color: {exterior_color}</p>
+          <p>Interior Color: {interior_color}</p>
+        </div>
+        <div className="single-car-listing-reviews">
+          <h2>Reviews</h2>
+          <ReviewForm onSubmit={handleAddReview} />
+          {carListing.reviews.map((review) => (
+            <Review
+              key={review.id}
+              review={review}
+              onUpdate={handleUpdateReview}
+              onDelete={handleDeleteReview}
+            />
+          ))}
+        </div>
+        <div className="single-car-listing-owner">
+          <h2>Owner</h2>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+          {/* You will need to fetch the number of listings for the user separately */}
+          <p>Number of Listings: {/* Display the number of listings here */}</p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   );
 };
 
