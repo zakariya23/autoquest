@@ -91,15 +91,18 @@ const SingleCarListing = () => {
         </div>
         <div className="single-car-listing-reviews">
           <h2>Reviews</h2>
-          <ReviewForm onSubmit={handleAddReview} />
-          {carListing.reviews.map((review) => (
-            <Review
-              key={review.id}
-              review={review}
-              onUpdate={handleUpdateReview}
-              onDelete={handleDeleteReview}
-            />
-          ))}
+          {user && user.id !== carListing.owner.id && (
+            <ReviewForm onSubmit={handleAddReview} />
+          )}
+         {carListing.reviews.map((review) => (
+  <Review
+    key={review.id}
+    review={review}
+    onUpdate={handleUpdateReview}
+    onDelete={handleDeleteReview}
+    userId={user?.id}
+  />
+))}
         </div>
         {isLoggedIn && (
         <div className="single-car-listing-owner">
