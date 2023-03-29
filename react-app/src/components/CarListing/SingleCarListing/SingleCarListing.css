@@ -1,0 +1,45 @@
+.single-car-listing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+  .single-car-listing-title {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .single-car-listing-carousel {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .single-car-listing-carousel .carousel-slider {
+    width: 100%;
+    height: 400px;
+  }
+
+  .single-car-listing-carousel .carousel-slider img {
+    object-fit: cover;
+    max-width: 100%;
+    height: 400px;
+  }
+
+  .single-car-listing-content {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .single-car-listing-overview {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .single-car-listing-reviews {
+    margin-bottom: 2rem;
+  }

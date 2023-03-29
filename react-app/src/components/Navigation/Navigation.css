@@ -11,10 +11,17 @@ nav ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 
 nav li {
   margin-right: 10px;
+  justify-content: space-evenly;
+}
+
+
+nav li:first-child {
+  margin-right: auto;
 }
 
 nav a {
@@ -31,6 +38,7 @@ nav a {
   background-color: transparent;
   border: none;
   padding: 0;
+  justify-content: end;
 }
 
 .menu-button-icon {
@@ -41,7 +49,11 @@ nav a {
 }
 
 .profile-dropdown {
-  position: relative;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  width: 10%;
   background-color: #ffffff;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
@@ -49,6 +61,11 @@ nav a {
   list-style-type: none;
   margin-top: 15px;
   border-radius: 4px;
+}
+
+.profile-dropdown li {
+  padding: 4px;
+  padding-top: 6px;
 }
 
 .hidden {

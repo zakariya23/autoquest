@@ -4,7 +4,7 @@ from .auth_routes import validation_errors_to_error_messages
 from flask_login import current_user, login_required
 from app.forms.review_form import ReviewForm
 
-review_routes = Blueprint('review', __name__)
+review_routes = Blueprint('reviews', __name__)
 
 
 # GET ALL REVIEWS BY CURRENT USER
@@ -65,7 +65,7 @@ def create_new_review(car_listing_id):
             user_id=int(current_user.get_id()),
             car_listing_id=car_listing_id,
             rating=data['rating'],
-            content=data['content']
+            review_text=data['review_text']
         )
         db.session.add(new_review)
         db.session.commit()
@@ -91,7 +91,7 @@ def update_review(id):
     data = request.get_json()
     if int(current_user.get_id()) == review.user_id:
         review.rating = data['rating']
-        review.content = data['content']
+        review.review_text = data['review_text']
 
         db.session.commit()
         return review.to_dict()

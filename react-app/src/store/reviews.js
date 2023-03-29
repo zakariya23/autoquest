@@ -8,7 +8,7 @@ const POST_REVIEW = "reviews/POST_REVIEW";
 const DELETE_REVIEW = "reviews/DELETE_REVIEW";
 const GET_SINGLE_REVIEW = "reviews/GET_SINGLE_REVIEW";
 const EDIT_REVIEW = "reviews/EDIT_REVIEW";
-const POST_REVIEW_IMAGE = "reviews/POST_REVIEW_IMAGE"
+
 
 /* ----- ACTIONS ----- */
 const getCarListingReviewsAction = (reviews) => {
@@ -85,18 +85,32 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
 };
 
 // Post new review by car listing id for current user
-export const postReviewThunk = (newReview, carListingId) => async (dispatch) => {
-    const res = await fetch(`/api/car_listings/${carListingId}/reviews`, {
+// Post new review by car listing id for current user
+export const postReviewThunk = (carListingId, newReview, userId) => async (dispatch) => {
+    console.log(carListingId)
+    console.log('USER ID:', userId)
+    console.log('new review:', newReview)
+
+    // Include user_id and car_listing_id in the newReview object
+    const updatedNewReview = {
+        ...newReview,
+        user_id: userId,
+        car_listing_id: carListingId
+    };
+
+    console.log(updatedNewReview)
+
+    const res = await fetch(`/api/reviews/car_listing/${carListingId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newReview),
+        body: JSON.stringify(updatedNewReview),
     });
 
     if (res.ok) {
         const createdReview = await res.json();
         dispatch(postReviewAction(createdReview));
         // Update the car listing with new review information
-        dispatch(getSingleCarListingThunk(carListingId));
+        dispatch(getSingleCarListingThunk(newReview)); // Pass carListingId here
         return createdReview;
     } else if (res.status < 500) {
         const data = await res.json();
@@ -107,7 +121,6 @@ export const postReviewThunk = (newReview, carListingId) => async (dispatch) => 
         return { "errors": ["A server error occurred. Please try again."] };
     }
 };
-
 // Get single review by review id
 export const getSingleReviewThunk = (reviewId) => async (dispatch) => {
     const res = await fetch(`/api/reviews/${reviewId}`);
@@ -121,7 +134,7 @@ export const getSingleReviewThunk = (reviewId) => async (dispatch) => {
 // Edit review by review id via current user
 export const editReviewThunk =
     (reviewId, reviewContent) => async (dispatch) => {
-        const res = await fetch(`/api/reviews / ${reviewId}`, {
+        const res = await fetch(`/api/reviews/${reviewId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reviewContent),

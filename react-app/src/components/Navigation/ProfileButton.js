@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
+import { NavLink } from "react-router-dom";
 import SignupFormModal from "../SignupFormModal";
 
 function ProfileButton({ user }) {
@@ -52,7 +53,12 @@ function ProfileButton({ user }) {
             <li>
               <button onClick={handleLogout}>Log Out</button>
             </li>
+            <li>
+            <NavLink exact to="/my_listings"><button>My Listings</button></NavLink>
+            </li>
+
           </>
+
         ) : (
           <>
             <OpenModalButton

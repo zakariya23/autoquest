@@ -1,0 +1,28 @@
+/* EditPhotos.css */
+
+.edit-photos img {
+    width: 100px;
+    height: auto;
+    margin: 5px;
+    border: 1px solid #ccc;
+    object-fit: cover;
+  }
+
+  .edit-photos .photo-container {
+    display: inline-block;
+    position: relative;
+    margin: 5px;
+  }
+
+  .edit-photos .delete-photo-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 12px;
+    padding: 2px 4px;
+    border-radius: 50%;
+    cursor: pointer;
+  }

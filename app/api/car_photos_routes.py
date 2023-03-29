@@ -28,7 +28,9 @@ def car_photos_delete(id):
             "status_code": 404
         }, 404
 
-    if int(current_user.get_id()) == car_photo.user_id:
+    car_listing = CarListing.query.get(car_photo.car_listing_id)  # Get the related car_listing object using car_listing_id
+
+    if int(current_user.get_id()) == car_listing.user_id:  # Compare with car_listing's user_id
         db.session.delete(car_photo)
         db.session.commit()
         return {
@@ -63,3 +65,12 @@ def get_car_photo_details(id):
 
     return car_photo
 
+
+# GET ALL CAR PHOTOS BY CAR LISTING ID
+@car_photo_routes.route('/car_listings/<int:car_listing_id>')
+def car_photos_by_car_listing(car_listing_id):
+    car_photo_query = db.session.query(
+        CarPhoto).filter(CarPhoto.car_listing_id == car_listing_id)
+    car_photos = car_photo_query.all()
+
+    return {'car_photos': {car_photo.id: car_photo.to_dict() for car_photo in car_photos}}

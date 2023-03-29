@@ -4,8 +4,7 @@ import { useHistory } from "react-router-dom";
 import { createCarListing } from "../../../store/car_listings";
 import { postCarPhotoThunk } from "../../../store/car_photos";
 import Autocomplete from "../../CarAutocomplete";
-
-// import "./CarListingCreate.css";
+import './CarListingCreate.css'
 
 export default function CarListingForm() {
   const dispatch = useDispatch();
@@ -17,9 +16,9 @@ export default function CarListingForm() {
   const [year, setYear] = useState("");
   const [price, setPrice] = useState("");
   const [trim, setTrim] = useState("");
-  const [bodyType, setBodyType] = useState("");
-  const [exteriorColor, setExteriorColor] = useState("");
-  const [interiorColor, setInteriorColor] = useState("");
+  const [body_type, setBodyType] = useState("");
+  const [exterior_color, setExteriorColor] = useState("");
+  const [interior_color, setInteriorColor] = useState("");
   const [mileage, setMileage] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -48,7 +47,7 @@ export default function CarListingForm() {
     setMileage("");
     setErrors([]);
 
-    history.push(`/car-listings/${createdCarListing.id}`);
+    history.push(`/car_listings/${createdCarListing.id}`);
   };
 
   const handleCarSelect = (selectedCar) => {
@@ -75,9 +74,9 @@ export default function CarListingForm() {
       year,
       price,
       trim,
-      body_type: bodyType,
-      exterior_color: exteriorColor,
-      interior_color: interiorColor,
+      body_type,
+      exterior_color,
+      interior_color,
       mileage,
     };
 
@@ -106,14 +105,28 @@ export default function CarListingForm() {
       }
 
 
-      if (validationErrors.length === 0) {
+      if (validationErrors.length > 0) {
+        setErrors(validationErrors);
+      } else {
         try {
           let createdCarListing = await dispatch(createCarListing(payload));
-          clearData(createdCarListing);
-          await dispatch(postCarPhotoThunk({
-              car_listing_id: createdCarListing.id,
-              photo_url: imageURL,
-            }, createdCarListing.id));
+          console.log(createCarListing)
+
+          if (createdCarListing) {
+            await dispatch(
+              postCarPhotoThunk(
+                {
+                  car_listing_id: createdCarListing.id,
+                  photo_url: imageURL,
+                },
+                createdCarListing.id
+              )
+            );
+
+            clearData(createdCarListing);
+          } else {
+            console.error("Error: Car listing not created.");
+          }
         } catch (res) {
           if (typeof res.json === 'function') {
             const data = await res.json();
@@ -156,13 +169,13 @@ export default function CarListingForm() {
   <input type="text" name="trim" value={trim} onChange={updateTrim} />
 
   <label htmlFor="bodyType">Body Type</label>
-  <input type="text" name="bodyType" value={bodyType} onChange={updateBodyType} />
+  <input type="text" name="bodyType" value={body_type} onChange={updateBodyType} />
 
   <label htmlFor="exteriorColor">Exterior Color</label>
-  <input type="text" name="exteriorColor" value={exteriorColor} onChange={updateExteriorColor} />
+  <input type="text" name="exteriorColor" value={exterior_color} onChange={updateExteriorColor} />
 
   <label htmlFor="interiorColor">Interior Color</label>
-  <input type="text" name="interiorColor" value={interiorColor} onChange={updateInteriorColor} />
+  <input type="text" name="interiorColor" value={interior_color} onChange={updateInteriorColor} />
 
   <label htmlFor="mileage">Mileage</label>
   <input type="number" name="mileage" value={mileage} onChange={updateMileage} required />
