@@ -7,12 +7,22 @@ const SEARCH_CAR_LISTINGS = "car_listings/SEARCH_CAR_LISTINGS";
 const FILTERED_CAR_LISTINGS = "car_listings/FILTERED_CAR_LISTINGS";
 const POST_CAR_LISTING = "car_listings/POST_CAR_LISTING";
 const UPDATE_CAR_LISTING = "car_listings/UPDATE_CAR_LISTING";
+const GET_MY_CAR_LISTINGS = "car_listings/GET_MY_CAR_LISTINGS";
+const DELETE_CAR_LISTING = "car_listings/DELETE_CAR_LISTING";
 
 /* ----- ACTIONS ----- */
 const getSingleCarListingAction = (carListing) => {
   return {
     type: GET_SINGLE_CAR_LISTING,
     carListing,
+  };
+};
+
+
+const getMyCarListingsAction = (myCarListings) => {
+  return {
+    type: GET_MY_CAR_LISTINGS,
+    myCarListings,
   };
 };
 
@@ -51,6 +61,13 @@ const updateCarListingAction = (carListing) => {
   };
 };
 
+const deleteCarListingAction = (carListingId) => {
+  return {
+    type: DELETE_CAR_LISTING,
+    carListingId,
+  };
+};
+
 /* ----- THUNKS ----- */
 
 // Display single car listing details
@@ -84,23 +101,29 @@ export const searchCarListingsThunk = (searchString) => async (dispatch) => {
 
 // create car listing
 export const createCarListing = (payload) => async (dispatch) => {
-  const res = await fetch("/api/car_listings", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
 
-  if (res.ok) {
-    const carListing = await res.json();
-    dispatch(postCarListingAction(carListing));
-    return carListing;
-  } else {
-    const errorData = await res.json();
-    throw errorData;
+    const res = await fetch("/api/car_listings/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      const carListing = await res.json();
+      dispatch(postCarListingAction(carListing));
+      console.log(carListing)
+      return carListing;
+    } else if (res.status < 500) {
+      const errorData = await res.json();
+      return errorData;
+    } else {
+      return {"errors": ["A server error occurred. Please try again."]};
+    }
+
+
   }
-};
 
 // update car listing
 export const updateCarListing = (payload) => async (dispatch) => {
@@ -122,11 +145,43 @@ export const updateCarListing = (payload) => async (dispatch) => {
   }
 };
 
+// get current user car listings
+export const getMyCarListingsThunk = () => async (dispatch) => {
+  const res = await fetch(`/api/car_listings/my_listings`);
+if (res.ok) {
+  const myCarListings = await res.json();
+  dispatch(getMyCarListingsAction(myCarListings));
+}
+};
+
+
+//delete car listing from id
+export const deleteCarListingThunk = (carListingId) => async (dispatch) => {
+  const res = await fetch(`/api/car_listings/${carListingId}`, {
+    method: "DELETE",
+  });
+
+  if (res.ok) {
+    const response = await res.json();
+    if (response.status_code === 200) {
+      dispatch(deleteCarListingAction(carListingId));
+      return response;
+    } else {
+      return response;
+    }
+  } else {
+    const errorData = await res.json();
+    throw errorData;
+  }
+};
+
+
 /* ----- INITIAL STATE ----- */
 const initialState = {
   carListings: null,
   singleCarListing: null,
   filteredCarListings: null,
+  myCarListings: null
 };
 
 /* ----- REDUCER ----- */
@@ -153,6 +208,19 @@ const carListingReducer = (state = initialState, action) => {
       newState.carListings = { ...newState.carListings, [action.carListing.id]: action.carListing };
       newState.singleCarListing = action.carListing;
       return newState;
+    case GET_MY_CAR_LISTINGS:
+      newState.myCarListings = Object.values(action.myCarListings);
+      return newState;
+      case DELETE_CAR_LISTING:
+        if (newState.carListings && newState.carListings[action.carListingId]) {
+          delete newState.carListings[action.carListingId];
+        }
+        if (newState.myCarListings) {
+          newState.myCarListings = newState.myCarListings.filter(
+            (carListing) => carListing.id !== action.carListingId
+          );
+        }
+        return newState;
     default:
       return state;
   }

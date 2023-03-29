@@ -62,10 +62,12 @@ def create_new_car_listing():
             make=data['make'],
             model=data['model'],
             year=data['year'],
-            color=data['color'],
+            exterior_color=data['exterior_color'],
+            interior_color=data['interior_color'],
             price=data['price'],
+            trim=data['trim'],
+            body_type=data['body_type'],
             mileage=data['mileage'],
-            description=data['description']
         )
         db.session.add(new_car_listing)
         db.session.commit()
@@ -91,14 +93,16 @@ def update_car_listing(id):
 
     data = request.get_json()
     if int(current_user.get_id()) == car_listing.user_id:
-        car_listing.make = data['make']
-        car_listing.model = data['model']
-        car_listing.year = data['year']
-        car_listing.color = data['color']
-        car_listing.price = data['price']
-        car_listing.mileage = data['mileage']
-        car_listing.description = data['description']
-        car_listing.updated_at = datetime.utcnow()
+        car_listing.make = data["make"]
+        car_listing.model = data["model"]
+        car_listing.year = int(data["year"])
+        car_listing.price = int(data["price"])
+        car_listing.trim = data["trim"]
+        car_listing.body_type = data["body_type"]
+        car_listing.exterior_color = data["exterior_color"]
+        car_listing.interior_color = data["interior_color"]
+        car_listing.mileage = int(data["mileage"])
+
 
         db.session.commit()
         return car_listing.to_dict()
@@ -153,8 +157,7 @@ def create_new_car_photo(id):
     if form.validate_on_submit():
         new_car_photo = CarPhoto(
             car_listing_id=id,
-            url=data['url'],
-            caption=data['caption']
+            photo_url=data['photo_url']
         )
         db.session.add(new_car_photo)
         db.session.commit()
@@ -184,3 +187,12 @@ def search_car_listings():
     )
 
     return {'car_listings': {car_listing.id: car_listing.to_dict() for car_listing in search_results}}
+
+
+# GET ALL CAR LISTINGS OWNED BY CURRENT USER
+@car_listing_routes.route('/my_listings')
+@login_required
+def get_my_car_listings():
+    user_id = int(current_user.get_id())
+    my_car_listings = CarListing.query.filter(CarListing.user_id == user_id).all()
+    return {'my_car_listings': {car_listing.id: car_listing.to_dict() for car_listing in my_car_listings}}

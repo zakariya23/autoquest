@@ -9,7 +9,8 @@ import AllCarListings from "./components/CarListing/AllCarListings";
 import SingleCarListing from "./components/CarListing/SingleCarListing";
 import CarListingForm from "./components/CarListing/CarListingCreate";
 import Autocomplete from "./components/CarAutocomplete";
-
+import MyCarListings from "./components/CarListing/MyCarListings";
+import EditCarListing from "./components/CarListing/CarListingEditDelete";
 
 
 function App() {
@@ -42,6 +43,10 @@ function App() {
           <Route exact path="/new">
             <CarListingForm />
           </Route>
+          <Route path="/my_listings">
+            <MyCarListings />
+          </Route>
+
         </Switch>
 
       )}

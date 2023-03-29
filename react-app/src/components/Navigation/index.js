@@ -3,14 +3,16 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
+import { useHistory } from 'react-router-dom';
 
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  const history = useHistory()
 
   return (
     <nav>
-    
+
       <ul>
         <li>
           <NavLink exact to="/">
@@ -18,9 +20,13 @@ function Navigation({ isLoaded }) {
           </NavLink>
         </li>
         {isLoaded && (
-          <li>
+          
+               <li>
             <ProfileButton user={sessionUser} />
           </li>
+
+
+
         )}
       </ul>
     </nav>

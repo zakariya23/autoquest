@@ -40,10 +40,10 @@ const deleteCarPhotoAction = (id) => {
 // Post new car photo by car_listing_id
 export const postCarPhotoThunk =
     (newCarPhoto, carListingId) => async (dispatch) => {
-        const res = await fetch(`/api/car_listings/${carListingId}/car_photos`, {
+        const res = await fetch(`/api/car_listings/${carListingId}/photos`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newCarPhoto),
+            body: JSON.stringify({ ...newCarPhoto, car_listing_id: carListingId }),
         });
 
         if (res.ok) {
@@ -74,11 +74,14 @@ export const deleteCarPhotoThunk = (carPhotoId) => async (dispatch) => {
     }
 };
 
+
 // Display all car photos for a car listing
 export const getCarPhotosThunk = (carListingId) => async (dispatch) => {
-    const res = await fetch(`/api/car_listings/${carListingId}/car_photos`);
+    const res = await fetch(`/api/car_photos/car_listings/${carListingId}`);
+
     if (res.ok) {
         const carPhotos = await res.json();
+        // console.log(carPhotos)
         dispatch(getCarPhotosAction(carPhotos));
     }
 };
@@ -106,7 +109,7 @@ const carPhotosReducer = (state = initialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_CAR_PHOTOS:
-            newState.carPhotos = action.carPhotos.carPhotos;
+            newState.carPhotos = action.carPhotos;
             return newState;
         case GET_SINGLE_CAR_PHOTO:
             newState.singleCarPhoto = action.carPhoto;
