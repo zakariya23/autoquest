@@ -46,7 +46,20 @@ def get_car_listing_details(id):
     car_listing['avg_rating'] = avg_rating
     car_listing['number_of_reviews'] = len(car_listing_reviews)
     car_listing['reviews']= [car_listing_review.to_dict() for car_listing_review in car_listing_reviews]
+
+    # Handle owner
+    owner = User.query.get(car_listing["user_id"])
+    owner_listings = CarListing.query.filter(CarListing.user_id == owner.id).count()
+    car_listing['owner'] = {
+        "email": owner.email,
+        "username": owner.username,
+        "number_of_listings": owner_listings
+    }
+
     return jsonify(car_listing)
+
+
+
 
 
 # CREATE NEW CAR LISTING
