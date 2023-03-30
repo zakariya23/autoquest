@@ -81,6 +81,7 @@ export default function CarListingForm() {
     };
 
 
+
     const checkImageURL = (imageURL) => {
         return (
           !imageURL.endsWith(".png") &&
@@ -139,8 +140,47 @@ export default function CarListingForm() {
 
   };
 
+  const carColors = [
+    "Black",
+    "White",
+    "Silver",
+    "Gray",
+    "Red",
+    "Blue",
+    "Brown",
+    "Green",
+    "Yellow",
+    "Orange",
+    "Gold",
+    "Purple",
+    "Other",
+  ];
+
+
+  const carColors2 = [
+    "Black",
+    "White",
+    "Red",
+    "Gray",
+    "Tan",
+    "Blue",
+    "Brown",
+    "Green",
+    "Yellow",
+    "Orange",
+    "Gold",
+    "Purple",
+    "Other",
+  ];
+
+  const ColorOption = ({ color }) => (
+    <option value={color} style={{ backgroundColor: color !== "Other" ? color : "transparent" }}>
+      {color}
+    </option>
+  );
   // Render form
   return (
+
     <div>
 
      <form className="car-listing-form" onSubmit={handleSubmit}>
@@ -173,10 +213,18 @@ export default function CarListingForm() {
   <input type="text" name="bodyType" value={body_type} onChange={updateBodyType} />
 
   <label htmlFor="exteriorColor">Exterior Color</label>
-  <input type="text" name="exteriorColor" value={exterior_color} onChange={updateExteriorColor} />
+<select name="exteriorColor" value={exterior_color} onChange={updateExteriorColor}>
+  {carColors.map((color) => (
+    <ColorOption key={color} color={color} />
+  ))}
+</select>
 
-  <label htmlFor="interiorColor">Interior Color</label>
-  <input type="text" name="interiorColor" value={interior_color} onChange={updateInteriorColor} />
+<label htmlFor="interiorColor">Interior Color</label>
+<select name="interiorColor" value={interior_color} onChange={updateInteriorColor}>
+  {carColors2.map((color) => (
+    <ColorOption key={color} color={color} />
+  ))}
+</select>
 
   <label htmlFor="mileage">Mileage</label>
   <input type="number" name="mileage" value={mileage} onChange={updateMileage} required />
