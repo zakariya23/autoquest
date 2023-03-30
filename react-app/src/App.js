@@ -12,6 +12,7 @@ import Autocomplete from "./components/CarAutocomplete";
 import MyCarListings from "./components/CarListing/MyCarListings";
 import EditCarListing from "./components/CarListing/CarListingEditDelete";
 import CarSearch from "./components/CarSearch";
+import About from "./components/About";
 
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+            <Route exact path="/" >
+            <AllCarListings />
+          </Route>
              <Route path="/search" >
             <CarSearch />
           </Route>
@@ -54,6 +58,7 @@ function App() {
         </Switch>
 
       )}
+      <About />
     </>
   );
 }

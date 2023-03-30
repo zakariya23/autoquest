@@ -56,7 +56,7 @@ function LoginFormPage() {
             required
           />
         </label>
-        <button type="submit">Log In asdasd</button>
+        <button type="submit">Log In</button>
         <button
           className="demo-user-button"
           type="submit"

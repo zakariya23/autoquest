@@ -1,0 +1,14 @@
+/* src/components/About/About.css */
+.about-container {
+    padding: 20px;
+    color: grey
+  }
+
+  .about-container a {
+    color: #0366d6;
+    text-decoration: none;
+  }
+
+  .about-container a:hover {
+    text-decoration: underline;
+  }

@@ -61,8 +61,10 @@ const SingleCarListing = () => {
   };
 
   const handleDeleteReview = async (reviewId) => {
-    await dispatch(deleteReviewThunk(reviewId));
-    setReviewActionCounter(reviewActionCounter + 1);
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      await dispatch(deleteReviewThunk(reviewId));
+      setReviewActionCounter(reviewActionCounter + 1);
+    }
   };
 
   return (

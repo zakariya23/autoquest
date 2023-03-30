@@ -51,13 +51,13 @@ function ProfileButton({ user }) {
             <li>{user.username}</li>
             <li>{user.email}</li>
             <li>
-              <button onClick={handleLogout}>Log Out</button>
+              <button onClick={handleLogout} className="button-green">Log Out</button>
             </li>
             <li>
-            <NavLink exact to="/my_listings"><button>My Listings</button></NavLink>
+            <NavLink exact to="/my_listings"><button className="button-green">My Listings</button></NavLink>
             </li>
             <li>
-            <NavLink exact to="/new"><button>New Listing</button></NavLink>
+            <NavLink exact to="/new"><button className="button-green">New Listing</button></NavLink>
             </li>
 
           </>
@@ -68,12 +68,14 @@ function ProfileButton({ user }) {
               buttonText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
+              className="button-green"
             />
 
             <OpenModalButton
               buttonText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
+              className="button-green"
             />
           </>
         )}

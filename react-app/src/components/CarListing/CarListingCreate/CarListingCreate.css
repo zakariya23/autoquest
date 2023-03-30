@@ -69,3 +69,28 @@
     margin-bottom: 10px;
     border-radius: 4px;
   }
+
+
+  select {
+    background: white;
+  }
+
+  option {
+    padding: 4px 8px;
+    margin: 1px 0;
+    border-radius: 4px;
+  }
+
+  option:not(:last-child)::before {
+    content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  option:last-child::before {
+    display: none;
+  }

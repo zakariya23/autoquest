@@ -43,8 +43,12 @@ const EditCarListing = ({ carListing, onClose }) => {
   };
 
   const handleDelete = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this listing?");
+
+  if (confirmDelete) {
     await dispatch(deleteCarListingThunk(carListing.id));
     onClose();
+  }
   };
 
   return (
