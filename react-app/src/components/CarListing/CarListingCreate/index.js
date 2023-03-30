@@ -145,6 +145,7 @@ export default function CarListingForm() {
 
      <form className="car-listing-form" onSubmit={handleSubmit}>
   <h2>Create a Car Listing</h2>
+  <label htmlFor="make">Search</label>
   <Autocomplete onCarSelect={handleCarSelect} />
   {errors.length > 0 && (
     <ul className="errors-list">
@@ -197,7 +198,7 @@ export default function CarListingForm() {
           </>
           }
 
-  <button type="submit">Submit</button>
+  <button type="submit" className="button-green">Submit</button>
 </form>
     </div>
   );

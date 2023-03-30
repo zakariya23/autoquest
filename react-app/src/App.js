@@ -26,6 +26,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+            <Route exact path="/" >
+            <AllCarListings />
+          </Route>
              <Route path="/search" >
             <CarSearch />
           </Route>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { signUp } from "../../store/session";
@@ -12,20 +12,24 @@ function SignupFormModal() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [errors, setErrors] = useState([]);
 	const { closeModal } = useModal();
+	const [isFormValid, setIsFormValid] = useState(false);
+
+	useEffect(() => {
+		if (password.length >= 6 && password === confirmPassword) {
+			setIsFormValid(true);
+		} else {
+			setIsFormValid(false);
+		}
+	}, [password, confirmPassword]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (password === confirmPassword) {
-			const data = await dispatch(signUp(username, email, password));
-			if (data) {
-				setErrors(data);
-			} else {
-				closeModal();
-			}
+
+		const data = await dispatch(signUp(username, email, password));
+		if (data) {
+			setErrors(data);
 		} else {
-			setErrors([
-				"Confirm Password field must be the same as the Password field",
-			]);
+			closeModal();
 		}
 	};
 
@@ -74,7 +78,12 @@ function SignupFormModal() {
 						required
 					/>
 				</label>
-				<button type="submit">Sign Up</button>
+				<button type="submit" disabled={!isFormValid} className="button-green">Sign Up</button>
+				{!isFormValid && (
+          <p className="form-validation-message">
+            Password must be at least 6 characters long and match the confirm password field.
+          </p>
+        )}
 			</form>
 		</>
 	);

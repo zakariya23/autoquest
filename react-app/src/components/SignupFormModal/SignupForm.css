@@ -1,0 +1,74 @@
+.SignupForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+
+  .SignupForm h1 {
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .SignupForm form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .SignupForm label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .SignupForm input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 3px;
+    border: 1px solid #ced4da;
+    appearance: none;
+    width: 100%;
+  }
+
+  .SignupForm input:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, 0.5);
+  }
+
+  .SignupForm button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+
+  .SignupForm button:hover {
+    background-color: #0056b3;
+  }
+
+  .SignupForm button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .form-validation-message {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+  }

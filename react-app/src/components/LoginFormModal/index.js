@@ -58,8 +58,8 @@ function LoginFormModal() {
             required
           />
         </label>
-        <button type="submit">Log In</button>
-        <button type="submit" onClick={e => demoSignIn(e)}>Demo User</button>
+        <button type="submit" className="button-green">Log In</button>
+        <button type="submit" onClick={e => demoSignIn(e)} className="button-green">Demo User</button>
       </form>
     </>
   );

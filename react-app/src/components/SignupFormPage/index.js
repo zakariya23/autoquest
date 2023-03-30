@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { signUp } from "../../store/session";
@@ -12,18 +12,24 @@ function SignupFormPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    if (password.length >= 6 && password === confirmPassword) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [password, confirmPassword]);
 
   if (sessionUser) return <Redirect to="/" />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-        const data = await dispatch(signUp(username, email, password));
-        if (data) {
-          setErrors(data)
-        }
-    } else {
-        setErrors(['Confirm Password field must be the same as the Password field']);
+
+    const data = await dispatch(signUp(username, email, password));
+    if (data) {
+      setErrors(data);
     }
   };
 
@@ -58,6 +64,7 @@ function SignupFormPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
             required
           />
         </label>
@@ -70,7 +77,12 @@ function SignupFormPage() {
             required
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={!isFormValid}>Sign Up</button>
+        {!isFormValid && (
+          <p className="form-validation-message">
+            Password must be at least 6 characters long and match the confirm password field.
+          </p>
+        )}
       </form>
     </>
   );

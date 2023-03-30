@@ -47,7 +47,7 @@ const MyCarListings = () => {
       {myCarListings.map((carListing) => (
         <div key={carListing.id} className="car-listing-container">
           <CarListingCard carListing={carListing} />
-          <button onClick={() => handleEdit(carListing)}>Edit</button>
+          <button onClick={() => handleEdit(carListing)} className="button-green" >Edit</button>
           {isEditing && selectedCarListing && selectedCarListing.id === carListing.id && (
             <div className="edit-menu">
               <EditCarListing carListing={selectedCarListing} onClose={handleClose} />
