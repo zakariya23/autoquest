@@ -13,6 +13,7 @@ import MyCarListings from "./components/CarListing/MyCarListings";
 import EditCarListing from "./components/CarListing/CarListingEditDelete";
 import CarSearch from "./components/CarSearch";
 import About from "./components/About";
+import Autocomplete2 from "./components/CarAutocomplete2";
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
             <AllCarListings />
           </Route>
              <Route path="/search" >
-            <CarSearch />
+            <Autocomplete2 />
           </Route>
           <Route path="/login" >
             <LoginFormPage />
@@ -44,9 +45,6 @@ function App() {
           </Route>
           <Route exact path="/car_listings/:id">
             <SingleCarListing />
-          </Route>
-          <Route path="/search">
-            <Autocomplete />
           </Route>
           <Route exact path="/new">
             <CarListingForm />
