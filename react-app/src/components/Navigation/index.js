@@ -19,8 +19,13 @@ function Navigation({ isLoaded }) {
           <img src={`https://media.discordapp.net/attachments/533035859214073877/1087508516635418705/image.png`} alt="Logo" className="logo" />
           </NavLink>
         </li>
+        <li>
+          <NavLink exact to="/search">
+          <img src={`https://icones.pro/wp-content/uploads/2021/06/icone-loupe-vert.png`} alt="Logo" className="logo" />
+          </NavLink>
+        </li>
         {isLoaded && (
-          
+
                <li>
             <ProfileButton user={sessionUser} />
           </li>
