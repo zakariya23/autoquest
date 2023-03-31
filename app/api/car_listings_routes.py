@@ -7,9 +7,22 @@ from app.forms.car_photo_form import CarPhotoForm
 from app.forms.review_form import ReviewForm
 from datetime import datetime
 from sqlalchemy import or_
+from app.scrapers.autotrader import get_autotrader_listings
 
 car_listing_routes = Blueprint('car_listings', __name__)
 
+
+@car_listing_routes.route('/search-autotrader', methods=['GET'])
+def search_autotrader():
+    make = request.args.get('make')
+    model = request.args.get('model')
+
+    if not make or not model:
+        return jsonify({"error": "Please provide make and model."}), 400
+
+    listings = get_autotrader_listings(make, model)
+
+    return jsonify(listings)
 
 # GET ALL CAR LISTINGS
 @car_listing_routes.route('/')

@@ -10,7 +10,7 @@ const ReviewForm = ({ onSubmit, review }) => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!review_text) {
+    if (!review_text.trim()) {
       setErrorMessage("Review text cannot be left empty.");
       return;
     }

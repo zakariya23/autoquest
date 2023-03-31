@@ -24,7 +24,7 @@ const CarSearch = () => {
               {car.year} {car.make} {car.model} {car.trim}
             </h3>
             <p>Price: ${car.price.toLocaleString()}</p>
-            {/* Render other car details as needed */}
+        
           </div>
         ))}
       </div>
