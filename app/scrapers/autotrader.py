@@ -24,16 +24,22 @@ def get_autotrader_listings(make, model):
         image_url = json_data["image"]
         mileage = json_data["mileageFromOdometer"]["value"]
         vin = json_data["vehicleIdentificationNumber"]
+        url = json_data["url"]
+        exterior_color = json_data["color"]
+        interior_color = json_data["vehicleInteriorColor"]
 
         listings.append({
             "title": title,
             "price": price,
             "image_url": image_url,
             "mileage": mileage,
-            "vin": vin
+            "vin": vin,
+            "url": url,
+            "exterior_color":exterior_color,
+            "interior_color":interior_color
         })
 
-    return listings
+    return sorted(listings, key=lambda x: int(x["price"]))
 
 if __name__ == "__main__":
     make = "BMW"
