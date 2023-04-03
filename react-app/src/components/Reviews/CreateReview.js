@@ -37,7 +37,7 @@ const ReviewForm = ({ onSubmit, review }) => {
       </div>
       {errorMessage && <p className="error-message" style={{fontWeight: 'bold', color: 'red'}}>{errorMessage}</p>}
       <div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="button-green">Submit</button>
       </div>
     </form>
   );
