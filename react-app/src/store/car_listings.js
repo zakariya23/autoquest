@@ -110,18 +110,7 @@ export const createCarListing = (payload) => async (dispatch) => {
       body: JSON.stringify(payload),
     });
 
-    if (res.ok) {
-      const carListing = await res.json();
-      dispatch(postCarListingAction(carListing));
-      console.log(carListing)
-      return carListing;
-    } else if (res.status < 500) {
-      const errorData = await res.json();
-      return errorData;
-    } else {
-      return {"errors": ["A server error occurred. Please try again."]};
-    }
-
+    return res;
 
   }
 

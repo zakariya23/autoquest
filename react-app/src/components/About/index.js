@@ -20,6 +20,16 @@ const About = () => {
         </a>
         . Check out the GitHub profile for more projects.
       </p>
+      <p>
+        LinkedIn can be found{' '}
+        <a
+          href="https://www.linkedin.com/in/zakariya-beg-74919a201/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          here
+        </a>
+      </p>
     </div>
   );
 };

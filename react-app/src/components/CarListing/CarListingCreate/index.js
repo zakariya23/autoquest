@@ -23,6 +23,7 @@ export default function CarListingForm() {
   const [imageURL, setImageURL] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Update functions for form fields
   const updateMake = (e) => setMake(e.target.value);
@@ -63,11 +64,15 @@ export default function CarListingForm() {
     setImagePreview(url);
   };
 
+  const findError = (field) => {
+    const error = errors.find((err) => err.toLowerCase().includes(field.toLowerCase()));
+    return error || "";
+  };
 
   const handleSubmit = async (e) => {
-    let validationErrors = []
+    let validationErrors = [];
     e.preventDefault();
-
+    setIsSubmitted(true);
     const payload = {
       make,
       model,
@@ -98,20 +103,18 @@ export default function CarListingForm() {
         validationErrors.push("Image URL is required");
 
       }
-      else {
-        if (checkImageURL(imageURL)) {
-          validationErrors.push("Image URL must end in .png, .jpg, or .jpeg");
 
-        }
-      }
 
+      console.log(errors)
+      console.log(payload)
 
       if (validationErrors.length > 0) {
         setErrors(validationErrors);
       } else {
-        try {
-          let createdCarListing = await dispatch(createCarListing(payload));
-          console.log(createCarListing)
+        const response = await dispatch(createCarListing(payload));
+
+        if (response.ok) {
+          let createdCarListing = await response.json();
 
           if (createdCarListing) {
             await dispatch(
@@ -128,18 +131,17 @@ export default function CarListingForm() {
           } else {
             console.error("Error: Car listing not created.");
           }
-        } catch (res) {
-          if (typeof res.json === 'function') {
-            const data = await res.json();
-            if (data && data.errors) setErrors(data.errors);
+        } else {
+          const data = await response.json();
+          if (data && data.errors) {
+            const extractedErrors = data.errors.map((error) => error.split(" : ")[1]);
+            setErrors(extractedErrors);
           } else {
-            console.error('Error:', res);
+            console.error("Error:", data);
           }
         }
       }
-
-  };
-
+    };
   const carColors = [
     "Black",
     "White",
@@ -185,7 +187,7 @@ export default function CarListingForm() {
 
      <form className="car-listing-form" onSubmit={handleSubmit}>
   <h2>Create a Car Listing</h2>
-  <label htmlFor="make">Search</label>
+  <label htmlFor="make"> <strong>Find Your Car:</strong> </label>
   <Autocomplete onCarSelect={handleCarSelect} />
   {errors.length > 0 && (
     <ul className="errors-list">
@@ -197,30 +199,39 @@ export default function CarListingForm() {
   <label htmlFor="make">Make</label>
   <input type="text" name="make" value={make} onChange={updateMake} required />
 
+
+
   <label htmlFor="model">Model</label>
   <input type="text" name="model" value={model} onChange={updateModel} required />
+
+
 
   <label htmlFor="year">Year</label>
   <input type="number" name="year" value={year} onChange={updateYear} required />
 
+
   <label htmlFor="price">Price</label>
   <input type="number" name="price" value={price} onChange={updatePrice} required />
 
+
+
+
   <label htmlFor="trim">Trim</label>
   <input type="text" name="trim" value={trim} onChange={updateTrim} />
+
 
   <label htmlFor="bodyType">Body Type</label>
   <input type="text" name="bodyType" value={body_type} onChange={updateBodyType} />
 
   <label htmlFor="exteriorColor">Exterior Color</label>
-<select name="exteriorColor" value={exterior_color} onChange={updateExteriorColor}>
+<select name="exteriorColor" value={exterior_color} onChange={updateExteriorColor} required>
   {carColors.map((color) => (
     <ColorOption key={color} color={color} />
   ))}
 </select>
 
 <label htmlFor="interiorColor">Interior Color</label>
-<select name="interiorColor" value={interior_color} onChange={updateInteriorColor}>
+<select name="interiorColor" value={interior_color} onChange={updateInteriorColor} required>
   {carColors2.map((color) => (
     <ColorOption key={color} color={color} />
   ))}
@@ -237,6 +248,8 @@ export default function CarListingForm() {
             onChange={handleImageURLChange}
             className="business-form-input"
           />
+ 
+
           {imagePreview && <><img src={imagePreview} alt="Preview" className="image-preview" style={{
             width: "320px",
             height: "180px",
