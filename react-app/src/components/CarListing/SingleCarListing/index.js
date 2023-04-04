@@ -9,6 +9,7 @@ import { postReviewThunk, deleteReviewThunk, editReviewThunk } from "../../../st
 import "./SingleCarListing.css";
 import ReviewForm from "../../Reviews/CreateReview";
 import Review from "./Review";
+import Autocomplete3 from "../../CarAutocomplete2/index2";
 
 const SingleCarListing = () => {
   const { id } = useParams();
@@ -105,6 +106,10 @@ const SingleCarListing = () => {
     userId={user?.id}
   />
 ))}
+<div>
+<h2>Related Listings:</h2>
+  <Autocomplete3 make={make} model={model}/>
+</div>
         </div>
         {isLoggedIn && (
         <div className="single-car-listing-owner">
