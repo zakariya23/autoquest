@@ -93,6 +93,12 @@ const Autocomplete2 = () => {
     //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
   });
 
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
+
   const renderCards = () => {
     if (!selectedCarData) {
       return null;
@@ -126,7 +132,7 @@ const Autocomplete2 = () => {
             <li><strong>Exterior Color:</strong> {carData.exterior_color}</li>
             <li><strong>Interior Color:</strong> {carData.interior_color ? carData.interior_color : 'N/A'}</li>
             <li><strong>VIN:</strong> {carData.vin}</li>
-            <li><a href={carData.url}  target="_blank">Listing</a></li>
+
           </ul>
         </div>
       </div>

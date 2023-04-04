@@ -6,6 +6,7 @@ def get_autotrader_listings(make, model):
     base_url = f"https://www.autotrader.com/cars-for-sale/all-cars/{make}/{model}"
 
     response = requests.get(base_url)
+    print(response)
 
     if response.status_code != 200:
         print(f"Error fetching listings: {response.status_code}")
